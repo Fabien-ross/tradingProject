@@ -1,0 +1,22 @@
+{
+  "name": "test-requin-dev",
+  "dockerComposeFile": "../compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "terminal.integrated.env.linux": {
+          "PYTHONPATH": "/app/src"
+        }
+      }
+    }
+  },
+  "forwardPorts": [8000, 5432],
+  "remoteUser": "root"
+}

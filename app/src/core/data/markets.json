@@ -1,0 +1,104 @@
+[
+  {
+    "market_id": "market-binance",
+    "name": "Binance",
+    "website": "https://www.binance.com",
+    "type_ids": [
+        "type-crypto", 
+        "type-future"
+    ]
+  },
+  {
+    "market_id": "market-coinbase",
+    "name": "Coinbase",
+    "website": "https://www.coinbase.com",
+    "type_ids": ["type-crypto"]
+  },
+  {
+    "market_id": "market-iggroup",
+    "name": "IgGroup",
+    "website": "https://www.iggroup.com",
+    "type_ids": [
+        "type-equity", 
+        "type-crypto",
+        "type-option",
+        "type-commodity",
+        "type-etf"
+    ]
+  },
+  {
+    "market_id": "market-interactivebrokers",
+    "name": "InteractiveBrokers",
+    "website": "https://www.interactivebrokers.ie",
+    "type_ids": [
+        "type-equity", 
+        "type-crypto",
+        "type-option",
+        "type-commodity",
+        "type-etf"
+    ]
+  },
+  {
+    "market_id": "market-kraken",
+    "name": "Kraken",
+    "website": "https://www.kraken.com",
+    "type_ids": ["type-crypto"]
+  },
+  {
+    "market_id": "market-saxobank",
+    "name": "SaxoBank",
+    "website": "https://www.home.saxo",
+    "type_ids": [
+        "type-equity", 
+        "type-crypto",
+        "type-option",
+        "type-commodity",
+        "type-etf",
+        "type-future"
+    ]
+  },
+  {
+    "market_id": "market-tradestation",
+    "name": "TradeStation",
+    "website": "https://www.tradestation.com",
+    "type_ids": [
+        "type-equity", 
+        "type-crypto",
+        "type-option",
+        "type-etf",
+        "type-future"
+    ]
+  },
+  {
+    "market_id": "market-webull",
+    "name": "Webull",
+    "website": "https://www.webull.com",
+    "type_ids": [
+        "type-equity", 
+        "type-crypto",
+        "type-option",
+        "type-etf"
+    ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

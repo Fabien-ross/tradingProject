@@ -1,0 +1,117 @@
+prod_pipeline:
+  launch database :
+    if no previous version: >
+      - update tables to most recent version
+    elif outdated version: >
+      - update tables to most recent version without deleting full tables
+    else: >
+      - do nothing
+  check & update markets :
+    check API: >
+      - check API for each supported market
+      - update each MarketInfo status
+      - instanciate a Market object for each market (active & inactive)
+      -> return a List[MarketInfo]
+    update Markets table (and consorts) : > 
+      for each market (using provided List[MarketInfo]):
+        - add it to database if absent, create a market_id;
+        - update if present (already a market_id) but outdated (update status for example);
+        - delete if no longer supported (don't delete if inactive);
+        - ignore if unchanged
+        - update MarketAssetTypes for each asset type if not present
+  update every Assets table :
+    initialize a full_dict Dict[str,List[BaseAsset]] each key being an asset_type:
+    for each active market, launch all assets retrieving: >
+      for each supported asset type (crypto, option, etc.):
+        - get every asset of specified asset type with correspond specified criteria (trading, quote asset, etc)
+        for each asset :
+          if asset in full_dict[asset_type].keys():
+            add market to this asset.markets
+          else:
+            instance a BaseAsset with corresponding infos
+      -> returns Dict[str,List[BaseAsset]] each key being an asset_type
+    check full_dict Dict[str,List[BaseAsset]] format:
+    check last general LAAC process date:
+      get every asset in the database in a db_full_dict:
+      compare, merge & update full_dict with db_full_dict with deletions and assets to add:
+          if less than x days: >  # partial update
+            if asset in db_full_dict but not in full_dict, add it to full dict and give it deletion status = -1
+            if asset in db_full_dict with score > 0, delete the BaseAsset from the dict (no change)
+            if asset in db_full_dict with score == 0, let the asset in the LAAC process
+            if asset not in db_full_dict, keep it in the full_dict (with status=0)
+          else: > # general update
+            if asset in db_full_dict but not in full_dict, add it to full dict and give it deletion status = -1
+            else keep it in the full_dict (with status=0)
+      lauch LAAC process for assets in full_dict with status = 0:
+        for each existing main_market:
+          for each asset_type: >
+            for each asset:
+              - get information for LAAC evaluation (from market)
+              - set the asset BaseAsset status score to a value (0-5)
+    for each supported asset in full_dict Dict[str,List[BaseAsset]], lauch asset type update: >
+      - for each asset of List[BaseAsset]:
+        - if absent, create an asset_id and add it to database
+        - if present (already an asset_id):
+          - update markets fields if needed:
+            - update markets column if it is not the same (delete no longer supported & add new markets);
+            - check if db main_market column is the right one and update main_market & main_market_id if it isn't;
+          - update status if needed (?)
+      - list every other asset
+      - delete any occurence of such assets except if positions or orders exist (in that case, let the status=0)
+  historical catchup process:
+    get state of the live_data table: >
+      return a dict of each symbol in the table with oldest & latest date
+    compare with the pre-written "data-must-have-dict":
+      return a dict of the data to retrieve
+    for each involved market:
+      retrieve the data and put it in a dict structure
+    update database: >
+      for each asset type table:
+        - delete every asset which doesn't appear in the full dict;
+        - save retrieved data
+    check the date:
+      if some klines are missing because they were created during the catchup process: >
+        - for each involved market, retrieve last kline(s) (of the involved time frames) of all needed assets
+        - for each asset type, save retrieved data in data_table
+  activate green light signal: ON
+  start ponctuals: >
+    [...]
+
+training_pipeline (one market & a (small) list of assets):
+  launch database :
+    if no previous version: >
+      - update tables to most recent version
+    elif outdated version: >
+      - update tables to most recent version without deleting full tables
+    else: >
+      - do nothing
+  check specified market API: >
+    - check API for specified market
+    - instanciate a Market object
+    -> return a MarketInfo object
+  update Markets table : >
+    add current market to table if absent, create a market_id (from a provided MarketInfo object);
+  check if specified assets are in Assets tables :
+    if not, stop training process
+  historical catchup process:
+    get state of the training_data table: >
+      return a dict of each symbol in the table with oldest & latest date
+    compare with the pre-written "data-must-have-dict":
+      return an optional dict of the data to retrieve
+    if there is data to retrieve:
+      retrieve the data in the specified market and put it in a dict structure
+    update database: >
+      for each asset type table:
+        - delete every asset which doesn't appear in the list of assets;
+        - save retrieved data
+  display the data:
+  
+          
+          
+            
+
+
+    
+
+    
+
